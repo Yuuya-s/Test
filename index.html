@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot UI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+    <header>
+        <h1 class="chatbot-title">Chatbot</h1>
+        <div>
+            <button id="save-chat-btn" class="save-chat-btn">💾 Save Chat</button>
+           
+            <button id="new-chat-btn" class="new-chat-btn">🆕 New Chat</button>
+            <button id="toggle-saved-chats" class="toggle-saved-chats">📂 Saved Chats</button>
+            <button id="theme-toggle" class="dark-mode-toggle">🌙 Dark Mode</button>
+        </div>
+    </header>
+    <div class="sidebar" id="sidebar">
+        <h2>Saved Chats</h2>
+        <ul id="saved-chats-list"></ul>
+    </div>
+    <div class="chat-container">
+        <div id="chat-window" class="chat-window"></div>
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <!-- Rename Chat Modal -->
+    <div id="rename-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Rename Chat</h2>
+            <input type="text" id="rename-input" placeholder="Enter new name...">
+            <button id="rename-save-btn">Save</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
