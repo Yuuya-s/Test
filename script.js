@@ -1,4 +1,26 @@
-// Function to send a message
+// Function to display generated code in the code container
+function displayCode(code) {
+    const codeOutput = document.getElementById("code-output");
+    codeOutput.textContent = code;
+    hljs.highlightElement(codeOutput); // Apply syntax highlighting
+}
+
+// Function to copy code to clipboard
+function copyCode() {
+    const codeOutput = document.getElementById("code-output");
+    navigator.clipboard.writeText(codeOutput.textContent);
+    alert("Code copied to clipboard!");
+}
+
+// Function to toggle code editing
+function toggleCodeEditing() {
+    const codeOutput = document.getElementById("code-output");
+    codeOutput.contentEditable = !codeOutput.isContentEditable;
+    const editButton = document.getElementById("edit-code-btn");
+    editButton.textContent = codeOutput.isContentEditable ? "💾 Save Edits" : "✏️ Edit Code";
+}
+
+// Function to send a message to the chatbot
 async function sendMessage() {
     const inputField = document.getElementById("user-input");
     const message = inputField.value.trim();
@@ -19,13 +41,16 @@ async function sendMessage() {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
     try {
+        // Get the selected model
+        const model = document.getElementById("model-select").value;
+
         // Send the user's message to the Flask backend
         const response = await fetch("http://127.0.0.1:5000/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ message: message }),
+            body: JSON.stringify({ message: message, model: model }),
         });
 
         if (!response.ok) {
@@ -37,7 +62,17 @@ async function sendMessage() {
         // Display the bot's reply in the chat window
         const botMessage = document.createElement("div");
         botMessage.classList.add("message", "bot");
-        botMessage.textContent = data.response;
+
+        // Check if the response contains code (wrapped in triple backticks)
+        if (data.response.includes("```")) {
+            const code = data.response.split("```")[1]; // Extract code
+            botMessage.innerHTML = `<pre><code class="hljs">${code}</code></pre>`;
+            hljs.highlightElement(botMessage.querySelector("code")); // Apply syntax highlighting
+            displayCode(code); // Display code in the code container
+        } else {
+            botMessage.textContent = data.response;
+        }
+
         chatWindow.appendChild(botMessage);
 
         // Scroll to the bottom of the chat window
@@ -264,20 +299,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add event listener for the Toggle Saved Chats button
     document.getElementById("toggle-saved-chats").addEventListener("click", toggleSidebar);
 
+    // Add event listener for the Copy Code button
+    document.getElementById("copy-code-btn").addEventListener("click", copyCode);
+
+    // Add event listener for the Edit Code button
+    document.getElementById("edit-code-btn").addEventListener("click", toggleCodeEditing);
+
     // Load saved chats list when the page loads
     updateSavedChatsList();
-});
-function saveChat() {
-    const chatWindow = document.getElementById("chat-window");
-    const chatHistory = chatWindow.innerHTML;
-
-    let savedChats = JSON.parse(localStorage.getItem("savedChats")) || [];
-    const chatName = `Chat ${savedChats.length + 1}`;
-
-    savedChats.push({ name: chatName, chat: chatHistory });
-    localStorage.setItem("savedChats", JSON.stringify(savedChats));
-
-    console.log("Chat saved:", savedChats); // Log saved chats
-    alert("Chat saved successfully!");
-    updateSavedChatsList();
-}
+});  document.getElementById("user-input").addEventListener("touchend", sendMessage);

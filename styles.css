@@ -324,3 +324,23 @@ body.light-mode button:hover {
 .sidebar.active + .chat-container {
     margin-left: 250px;
 }
+
+/* Model Select Dropdown */
+#model-select {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background: #333;
+    color: #fff;
+    margin-right: 10px;
+}
+
+#model-select:hover {
+    background: #444;
+}
+@media (max-width: 360px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }

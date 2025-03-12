@@ -9,13 +9,14 @@ CORS(app)  # Enable CORS for all routes
 def chat():
     data = request.json
     user_message = data.get("message", "")
+    model = data.get("model", "mistral")  # Default to mistral if no model is specified
 
     if not user_message:
         return jsonify({"error": "Message is required"}), 400
 
     try:
-        # Use Ollama's Mistral to generate a response
-        response = ollama.chat(model="mistral", messages=[{"role": "user", "content": user_message}])
+        # Use the selected model to generate a response
+        response = ollama.chat(model=model, messages=[{"role": "user", "content": user_message}])
         return jsonify({"response": response['message']['content']})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
