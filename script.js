@@ -267,3 +267,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Load saved chats list when the page loads
     updateSavedChatsList();
 });
+function saveChat() {
+    const chatWindow = document.getElementById("chat-window");
+    const chatHistory = chatWindow.innerHTML;
+
+    let savedChats = JSON.parse(localStorage.getItem("savedChats")) || [];
+    const chatName = `Chat ${savedChats.length + 1}`;
+
+    savedChats.push({ name: chatName, chat: chatHistory });
+    localStorage.setItem("savedChats", JSON.stringify(savedChats));
+
+    console.log("Chat saved:", savedChats); // Log saved chats
+    alert("Chat saved successfully!");
+    updateSavedChatsList();
+}
