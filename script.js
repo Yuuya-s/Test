@@ -60,11 +60,15 @@ async function sendMessage() {
 function saveChat() {
     const chatWindow = document.getElementById("chat-window");
     const chatHistory = chatWindow.innerHTML; // Save the entire chat history as HTML
-    const chatName = `Chat ${savedChats.length + 1}`; // Default name for the chat
 
     // Get existing saved chats or initialize an empty array
-    const savedChats = JSON.parse(localStorage.getItem("savedChats")) || [];
-    savedChats.push({ name: chatName, chat: chatHistory }); // Add the new chat
+    let savedChats = JSON.parse(localStorage.getItem("savedChats")) || [];
+    const chatName = `Chat ${savedChats.length + 1}`; // Default name for the chat
+
+    // Add the new chat to the savedChats array
+    savedChats.push({ name: chatName, chat: chatHistory });
+
+    // Save the updated array back to localStorage
     localStorage.setItem("savedChats", JSON.stringify(savedChats));
 
     alert("Chat saved successfully!");
